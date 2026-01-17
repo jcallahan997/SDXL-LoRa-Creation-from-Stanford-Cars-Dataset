@@ -1,6 +1,6 @@
 # Setup Guide
 
-Complete setup instructions for training Mercedes E-Class LoRA models.
+Complete setup instructions for training the Mercedes E-Class SDXL LoRA model.
 
 ## Prerequisites
 
@@ -126,50 +126,52 @@ KOHYA_DIR = Path("/YOUR/PATH/TO/kohya").absolute()
 SDXL_MODEL = KOHYA_DIR / "models" / "sd_xl_base_1.0.safetensors"
 ```
 
-### 7. Prepare Training Data
+### 7. Generate Captions (Optional)
 
-If you have your own car images:
-
-```bash
-# Place images in:
-./combined/<Model_Name>/
-
-# For example:
-./combined/Mercedes-Benz E-Class Sedan 2012/*.jpg
-
-# Run preparation script:
-python3 prepare_training_data.py
-```
-
-This creates the training structure in `lora_training_kohya/`.
-
-### 8. Generate Training Configs
+If you need to regenerate captions for E-Class images:
 
 ```bash
-python3 create_training_configs.py
+# Make sure Ollama is running
+ollama serve
+
+# Generate captions
+python3 generate_qwen_captions_eclass.py
 ```
 
-This creates TOML config files in `lora_configs/` directory.
+This creates detailed captions with accurate color detection using Qwen2-VL.
 
-### 9. Test Training
+### 8. Train the E-Class LoRA
 
-Run a test training session (1-2 hours):
+Run the training (approximately 1-2 hours on M4 Max):
 
 ```bash
 ./train_single_test.sh
 ```
 
-Monitor the output for errors. Training logs are saved to `lora_outputs/mercedesbenz_eclass_sedan_2012/logs/`.
+This will:
+- Train for 15 epochs
+- Save checkpoints every 5 epochs
+- Generate sample images during training
+- Output to `lora_outputs/mercedesbenz_eclass_sedan_2012/`
 
-### 10. Train All Models
+Monitor progress: Training logs are saved to `lora_outputs/mercedesbenz_eclass_sedan_2012/logs/`.
 
-Once the test succeeds:
+### 9. Optional: Multi-Model Training
+
+If you want to expand to other car models:
 
 ```bash
+# Prepare data for all models
+python3 prepare_training_data.py
+
+# Generate configs
+python3 create_training_configs.py
+
+# Train all models (9-18 hours)
 ./train_all_loras.sh
 ```
 
-This trains all 9 models sequentially (9-18 hours total).
+Note: This requires caption generation and data preparation for each model.
 
 ## Troubleshooting
 

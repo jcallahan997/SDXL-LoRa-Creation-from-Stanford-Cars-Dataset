@@ -1,42 +1,45 @@
-# Mercedes E-Class LoRA Training
+# Mercedes E-Class SDXL LoRA Training
 
-Train SDXL LoRA models for Mercedes-Benz and Volkswagen vehicles using the Kohya training framework.
+Train a Stable Diffusion XL (SDXL) LoRA model for the Mercedes-Benz E-Class Sedan 2012 using the Kohya training framework.
 
 ## Overview
 
-This project trains Stable Diffusion XL (SDXL) LoRA models to generate photorealistic images of specific car models. The training pipeline uses the Kohya ss-scripts framework optimized for Apple Silicon (M4 Max).
+This project trains a high-quality SDXL LoRA model to generate photorealistic images of the **Mercedes-Benz E-Class Sedan (2012 model)** from the Stanford Cars Dataset.
 
-### Supported Models
+**Key Features:**
+- **Qwen2-VL Vision Model** for intelligent caption generation with accurate color detection
+- **Kohya ss-scripts** for LoRA training, optimized for Apple Silicon (M4 Max)
+- **87 training images** with detailed, AI-generated captions
+- **Trigger word:** `mercedesbenzeclasssedan2012`
 
-**Mercedes-Benz:**
-- 300-Class Convertible 1993
-- C-Class Sedan 2012
-- E-Class Sedan 2012
-- S-Class Sedan 2012
-- SL-Class Coupe 2009
-- Sprinter Van 2012
+The trained LoRA can generate E-Class images with proper colors, angles, and styling consistent with the 2012 model year.
 
-**Volkswagen:**
-- Beetle Hatchback 2012
-- Golf Hatchback 1991
-- Golf Hatchback 2012
+**Note:** While this repository contains scripts for multiple car models, the current implementation focuses on the Mercedes E-Class. The multi-model scripts (`create_training_configs.py`, `train_all_loras.sh`) are included for potential future expansion.
 
 ## Project Structure
 
 ```
 .
-├── generate_qwen_captions_eclass.py        # Generate detailed captions using Qwen2-VL
-├── generate_remaining_captions_eclass.py   # Generate captions for remaining images
-├── prepare_training_data.py                # Organizes images and captions for training
-├── create_training_configs.py              # Generates TOML config files for each model
-├── train_single_test.sh                    # Train a single LoRA (E-Class test)
-├── train_all_loras.sh                      # Train all 9 LoRAs sequentially
-├── test_eclass.toml                        # Simple config for E-Class testing
-├── combined/                               # Source images by car model
-├── lora_training_kohya/                    # Prepared training data with captions
-├── lora_outputs/                           # Trained LoRA models (generated)
-└── lora_configs/                           # Training configuration files (generated)
+├── generate_qwen_captions_eclass.py        # Generate captions using Qwen2-VL for E-Class
+├── generate_remaining_captions_eclass.py   # Generate captions for uncaptioned E-Class images
+├── train_single_test.sh                    # Train the E-Class LoRA
+├── test_eclass.toml                        # Training config for E-Class
+├── prepare_training_data.py                # [Multi-model] Organize training data
+├── create_training_configs.py              # [Multi-model] Generate training configs
+├── train_all_loras.sh                      # [Multi-model] Batch training script
+├── merge_train_test.sh                     # Utility script
+├── combined/                               # Source images from Stanford Cars Dataset
+├── lora_training_kohya/mercedesbenz_eclass/  # E-Class training data with captions
+├── lora_outputs/                           # Trained LoRA models output directory
+└── lora_configs/                           # Generated training configuration files
 ```
+
+**Active Scripts (E-Class):**
+- Caption generation: `generate_qwen_captions_eclass.py`
+- Training: `train_single_test.sh` with `test_eclass.toml`
+
+**Multi-Model Scripts (For Future Expansion):**
+- `prepare_training_data.py`, `create_training_configs.py`, `train_all_loras.sh`
 
 ## Prerequisites
 
@@ -70,13 +73,17 @@ Download `sd_xl_base_1.0.safetensors` from [Stability AI](https://huggingface.co
 
 ### Quick Start - Train Mercedes E-Class LoRA
 
-Test the setup with a single model (approximately 1-2 hours on M4 Max):
+Train the E-Class LoRA model (approximately 1-2 hours on M4 Max):
 
 ```bash
 ./train_single_test.sh
 ```
 
-This will train a LoRA for the Mercedes E-Class Sedan 2012 using 87 training images.
+This trains the Mercedes E-Class Sedan 2012 LoRA using:
+- **87 training images** with AI-generated captions
+- **15 epochs** with saves every 5 epochs
+- **1024x1024 resolution** with bucketing
+- **Trigger word:** `mercedesbenzeclasssedan2012`
 
 ### Generate Captions with Qwen2-VL
 
@@ -129,41 +136,31 @@ The Qwen2-VL model provides:
 - Detailed environment descriptions (parking lot, street, indoor, etc.)
 - Consistent trigger word usage for optimal LoRA training
 
-### Prepare Training Data
+### Advanced: Multi-Model Scripts (Future Expansion)
 
-If you have new images to train with:
+The repository includes scripts for training multiple car models, though currently only E-Class is implemented:
 
+**Prepare Training Data for Multiple Models:**
 ```bash
 python3 prepare_training_data.py
 ```
 
-This script:
-- Reads images from `combined/<model_name>/`
-- Finds matching captions from enhanced caption directory
-- Copies image/caption pairs to `lora_training_kohya/<model>/`
-
-### Generate Training Configurations
-
-Create TOML config files for Kohya training:
-
+**Generate Configs for Multiple Models:**
 ```bash
 python3 create_training_configs.py
 ```
 
-This generates optimized config files in `lora_configs/` for each vehicle model.
-
-### Train All Models
-
-Train all 9 LoRAs sequentially (estimated 9-18 hours total):
-
+**Train All Models Sequentially:**
 ```bash
-./train_all_loras.sh
+./train_all_loras.sh  # Would train all 9 models (9-18 hours)
 ```
 
-Each LoRA takes 1-2 hours depending on hardware. The script will:
-1. Activate the Kohya virtual environment
-2. Train each model with its config file
-3. Save outputs to `lora_outputs/<model>/`
+These scripts are configured for 9 car models (6 Mercedes, 3 Volkswagen) but require:
+- Caption generation for each model
+- Training data preparation
+- Updated config files
+
+For now, focus on the E-Class implementation using `train_single_test.sh`.
 
 ## Training Configuration
 
@@ -199,30 +196,39 @@ This allows training on images of varying aspect ratios without distortion.
 
 ## Using Trained LoRAs
 
-### In ComfyUI
+### In ComfyUI (Recommended)
 
-1. Copy the `.safetensors` file from `lora_outputs/<model>/` to `ComfyUI/models/loras/`
-2. Add a "Load LoRA" node in your workflow
-3. Use the trigger word in your prompt
+ComfyUI + SDXL + LoRA is an excellent combination for high-quality image generation with fine control over the generation process.
 
-### Trigger Words
+1. Copy the `.safetensors` file from `lora_outputs/mercedesbenz_eclass_sedan_2012/` to `ComfyUI/models/loras/`
+2. In your ComfyUI workflow:
+   - Load the SDXL base model (checkpoint loader)
+   - Add a "Load LoRA" node
+   - Select your E-Class LoRA file
+   - Set LoRA strength (start with 0.8-1.0)
+3. Use the trigger word `mercedesbenzeclasssedan2012` in your prompt
+4. Generate images with your preferred sampler and settings
 
-Each model has a unique trigger word:
+**Why ComfyUI?**
+- Node-based workflow provides precise control
+- Easy to adjust LoRA strength and blend multiple LoRAs
+- Excellent SDXL support with optimizations
+- Real-time preview and workflow saving
 
-| Model | Trigger Word |
-|-------|-------------|
-| Mercedes E-Class 2012 | `mercedesbenzeclasssedan2012` |
-| Mercedes C-Class 2012 | `mercedesbenzccl asssedan2012` |
-| Mercedes S-Class 2012 | `mercedesbenzsclasssedan2012` |
-| VW Beetle 2012 | `volkswagenbeetlehatchback2012` |
-| VW Golf 1991 | `volkswagengolfhatchback1991` |
+### Trigger Word
+
+The E-Class LoRA uses the trigger word: **`mercedesbenzeclasssedan2012`**
+
+Always include this trigger word in your prompts for best results.
 
 ### Example Prompts
 
 ```
 mercedesbenzeclasssedan2012, blue Mercedes E-Class sedan, front view, professional photography
 mercedesbenzeclasssedan2012, black luxury sedan on city street, sunset lighting
-mercedesbenzeclasssedan2012, parked in modern garage, studio lighting
+mercedesbenzeclasssedan2012, silver E-Class parked in modern garage, studio lighting
+mercedesbenzeclasssedan2012, white Mercedes sedan, three-quarter front view, outdoor parking lot
+mercedesbenzeclasssedan2012, red E-Class driving on highway, dynamic shot
 ```
 
 ## Monitoring Training
