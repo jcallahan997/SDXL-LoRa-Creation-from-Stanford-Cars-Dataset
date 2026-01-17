@@ -25,15 +25,17 @@ This project trains Stable Diffusion XL (SDXL) LoRA models to generate photoreal
 
 ```
 .
-├── prepare_training_data.py    # Organizes images and captions for training
-├── create_training_configs.py  # Generates TOML config files for each model
-├── train_single_test.sh        # Train a single LoRA (E-Class test)
-├── train_all_loras.sh          # Train all 9 LoRAs sequentially
-├── test_eclass.toml            # Simple config for E-Class testing
-├── combined/                   # Source images by car model
-├── lora_training_kohya/        # Prepared training data with captions
-├── lora_outputs/               # Trained LoRA models (generated)
-└── lora_configs/               # Training configuration files (generated)
+├── generate_qwen_captions_eclass.py        # Generate detailed captions using Qwen2-VL
+├── generate_remaining_captions_eclass.py   # Generate captions for remaining images
+├── prepare_training_data.py                # Organizes images and captions for training
+├── create_training_configs.py              # Generates TOML config files for each model
+├── train_single_test.sh                    # Train a single LoRA (E-Class test)
+├── train_all_loras.sh                      # Train all 9 LoRAs sequentially
+├── test_eclass.toml                        # Simple config for E-Class testing
+├── combined/                               # Source images by car model
+├── lora_training_kohya/                    # Prepared training data with captions
+├── lora_outputs/                           # Trained LoRA models (generated)
+└── lora_configs/                           # Training configuration files (generated)
 ```
 
 ## Prerequisites
@@ -42,6 +44,7 @@ This project trains Stable Diffusion XL (SDXL) LoRA models to generate photoreal
 2. **SDXL base model** (`sd_xl_base_1.0.safetensors`) in the models directory
 3. **Python 3.10+** with virtual environment
 4. **Apple Silicon Mac** (M1/M2/M3/M4 recommended) or CUDA GPU
+5. **Ollama** with Qwen2-VL model (for caption generation)
 
 ## Installation
 
@@ -74,6 +77,57 @@ Test the setup with a single model (approximately 1-2 hours on M4 Max):
 ```
 
 This will train a LoRA for the Mercedes E-Class Sedan 2012 using 87 training images.
+
+### Generate Captions with Qwen2-VL
+
+High-quality captions are crucial for training effective LoRAs. This project uses Qwen2-VL (via Ollama) for superior color detection and spatial accuracy.
+
+#### Setup Ollama and Qwen2-VL
+
+```bash
+# Install Ollama (if not already installed)
+# Visit: https://ollama.ai
+
+# Pull the Qwen2-VL model
+ollama pull qwen2-vl:7b
+
+# Start Ollama (if not running)
+ollama serve
+```
+
+#### Generate Captions for E-Class Images
+
+```bash
+# Generate captions for all E-Class images
+python3 generate_qwen_captions_eclass.py
+```
+
+This will:
+- Process all images in the E-Class training directory
+- Generate detailed captions including exact colors, viewing angles, and settings
+- Save captions as `.txt` files next to each image
+- Use the trigger word `mercedesbenzeclasssedan2012`
+
+#### Generate Captions for Remaining Images
+
+If you need to caption only images that don't have good captions yet:
+
+```bash
+# Skip images that already have detailed captions
+python3 generate_remaining_captions_eclass.py
+```
+
+This is useful if:
+- The caption generation was interrupted
+- You added new images to the dataset
+- You want to re-caption only specific images
+
+**Caption Quality:**
+The Qwen2-VL model provides:
+- Accurate color detection (black, white, silver, red, blue, etc.)
+- Precise viewing angles (front view, three-quarter view, etc.)
+- Detailed environment descriptions (parking lot, street, indoor, etc.)
+- Consistent trigger word usage for optimal LoRA training
 
 ### Prepare Training Data
 

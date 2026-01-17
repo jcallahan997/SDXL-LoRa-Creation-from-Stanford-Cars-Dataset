@@ -59,7 +59,27 @@ cd ~/Projects/stable-diffusion/models
 wget https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors
 ```
 
-### 3. Clone This Repository
+### 3. Install Ollama and Qwen2-VL (for Caption Generation)
+
+Ollama runs the Qwen2-VL vision model locally for generating high-quality image captions:
+
+```bash
+# Install Ollama
+# Visit: https://ollama.ai and download for your platform
+
+# Pull the Qwen2-VL model (8B parameters, ~5GB)
+ollama pull qwen2-vl:7b
+
+# Or use the 3B model for faster generation (less accurate)
+ollama pull qwen3-vl:8b
+```
+
+Start Ollama server (required for caption generation):
+```bash
+ollama serve
+```
+
+### 4. Clone This Repository
 
 ```bash
 cd ~/Projects/stable-diffusion
@@ -67,7 +87,7 @@ git clone <your-repo-url> "stanford dataset"
 cd "stanford dataset"
 ```
 
-### 4. Verify Directory Structure
+### 5. Verify Directory Structure
 
 Your directory structure should look like:
 
@@ -85,7 +105,7 @@ Your directory structure should look like:
     └── ...
 ```
 
-### 5. Update File Paths
+### 6. Update File Paths
 
 If your directory structure differs, update these files:
 
@@ -106,7 +126,7 @@ KOHYA_DIR = Path("/YOUR/PATH/TO/kohya").absolute()
 SDXL_MODEL = KOHYA_DIR / "models" / "sd_xl_base_1.0.safetensors"
 ```
 
-### 6. Prepare Training Data
+### 7. Prepare Training Data
 
 If you have your own car images:
 
@@ -123,7 +143,7 @@ python3 prepare_training_data.py
 
 This creates the training structure in `lora_training_kohya/`.
 
-### 7. Generate Training Configs
+### 8. Generate Training Configs
 
 ```bash
 python3 create_training_configs.py
@@ -131,7 +151,7 @@ python3 create_training_configs.py
 
 This creates TOML config files in `lora_configs/` directory.
 
-### 8. Test Training
+### 9. Test Training
 
 Run a test training session (1-2 hours):
 
@@ -141,7 +161,7 @@ Run a test training session (1-2 hours):
 
 Monitor the output for errors. Training logs are saved to `lora_outputs/mercedesbenz_eclass_sedan_2012/logs/`.
 
-### 9. Train All Models
+### 10. Train All Models
 
 Once the test succeeds:
 
