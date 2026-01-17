@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Machine Learning & Training
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.h5
+*.pb
+
+# Training outputs
+lora_outputs/
+lora_weights/
+output/
+logs/
+runs/
+wandb/
+
+# Large data directories
+combined/
+lora_training_kohya/
+photos_captions_s600/
+processed/
+models/
+diffusion_models/
+
+# Training logs
+*.log
+training.log
+training_eclass.log
+events.out.tfevents.*
+
+# Cache
+.cache/
+*.cache
+cache/
+latents_cache/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Generated configs (optional - uncomment if you want to track these)
+# lora_configs/*.toml
+
+# OS specific
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# TensorBoard
+events.out.tfevents.*
+
+# VAE
+vae/
+
+# Workspace files
+*.code-workspace

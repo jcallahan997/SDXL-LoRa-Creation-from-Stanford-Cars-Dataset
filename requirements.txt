@@ -1,0 +1,13 @@
+# Core dependencies for data preparation scripts
+# Note: Kohya ss-scripts has its own requirements - install separately
+
+# Python standard library is sufficient for the included scripts:
+# - prepare_training_data.py
+# - create_training_configs.py
+
+# For Kohya training, see:
+# https://github.com/kohya-ss/sd-scripts
+
+# Optional: If you want to add additional tools
+# pillow>=10.0.0  # Image processing
+# tqdm>=4.65.0    # Progress bars
