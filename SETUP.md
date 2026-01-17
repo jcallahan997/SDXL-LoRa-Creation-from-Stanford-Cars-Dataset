@@ -4,11 +4,22 @@ Complete setup instructions for training the Mercedes E-Class SDXL LoRA model.
 
 ## Prerequisites
 
-- macOS with Apple Silicon (M1/M2/M3/M4) or Linux/Windows with CUDA GPU
-- Python 3.10 or higher
-- Git
-- 50GB+ free disk space
-- 16GB+ RAM (32GB recommended)
+### Hardware Requirements (IMPORTANT)
+
+**This setup is specifically designed for local training on Apple Silicon MacBooks:**
+
+- **Apple Silicon Mac** (M1/M2/M3/M4 Max or Ultra required)
+- **36GB+ RAM MINIMUM** (64GB recommended, especially for M4 Max)
+- **50GB+ free disk space** (for models, training data, and outputs)
+- **Python 3.10 or higher**
+- **Git**
+
+**Training Performance:**
+- M4 Max (64GB): ~1-2 hours per LoRA
+- M3 Max (36GB): ~2-3 hours per LoRA
+- M1/M2 Pro: May need reduced batch sizes
+
+**Note:** If you have less than 36GB RAM or want to use NVIDIA GPUs, you'll need to modify the training configs (batch size, resolution, etc.) in `test_eclass.toml`.
 
 ## Step-by-Step Setup
 

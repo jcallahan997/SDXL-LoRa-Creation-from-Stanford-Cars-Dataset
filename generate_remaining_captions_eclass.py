@@ -2,6 +2,8 @@
 """
 Generate captions ONLY for images that still have old/short captions.
 Skips images that already have detailed Qwen2-VL captions.
+
+⚠️  IMPORTANT: Update DATASET_DIR below to match your local setup!
 """
 
 import os
@@ -11,8 +13,9 @@ import base64
 from pathlib import Path
 import time
 
-# Configuration
-DATASET_DIR = "/Users/jamescallahan/Projects/stable-diffusion/stanford dataset/lora_training_kohya/mercedesbenz_eclass/10_mercedesbenzeclasssedan2012"
+# ⚠️  UPDATE THIS PATH: Location of your E-Class training images
+# Example: "/Users/YOUR_USERNAME/path/to/lora_training_kohya/mercedesbenz_eclass/10_mercedesbenzeclasssedan2012"
+DATASET_DIR = "/path/to/lora_training_kohya/mercedesbenz_eclass/10_mercedesbenzeclasssedan2012"
 TRIGGER_WORD = "mercedesbenzeclasssedan2012"
 
 # Qwen2-VL model via Ollama

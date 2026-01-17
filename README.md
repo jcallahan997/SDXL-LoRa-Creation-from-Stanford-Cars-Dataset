@@ -43,31 +43,50 @@ The trained LoRA can generate E-Class images with proper colors, angles, and sty
 
 ## Prerequisites
 
-1. **Kohya ss-scripts** installed at `/Users/jamescallahan/Projects/stable-diffusion/kohya`
-2. **SDXL base model** (`sd_xl_base_1.0.safetensors`) in the models directory
+### Hardware Requirements (for Local MacBook Training)
+
+**IMPORTANT:** This implementation is designed for local training on Apple Silicon MacBooks and requires:
+- **Apple Silicon Mac** (M1/M2/M3/M4 Max or Ultra)
+- **36GB+ RAM minimum** (64GB recommended for M4 Max)
+- **50GB+ free disk space**
+- Training time: ~1-2 hours per LoRA on M4 Max
+
+**Note:** For machines with less RAM or different hardware (NVIDIA GPU, etc.), you'll need to adjust batch sizes and training parameters in the config files.
+
+### Software Requirements
+
+1. **Kohya ss-scripts** - LoRA training framework
+2. **SDXL base model** - `sd_xl_base_1.0.safetensors` (6.94 GB)
 3. **Python 3.10+** with virtual environment
-4. **Apple Silicon Mac** (M1/M2/M3/M4 recommended) or CUDA GPU
-5. **Ollama** with Qwen2-VL model (for caption generation)
+4. **Ollama** with Qwen2-VL model (for caption generation)
 
 ## Installation
 
 ### 1. Clone this repository
 
 ```bash
-git clone <your-repo-url>
-cd stanford\ dataset
+git clone https://github.com/jcallahan997/SDXL-LoRa-Creation-from-Stanford-Cars-Dataset.git
+cd SDXL-LoRa-Creation-from-Stanford-Cars-Dataset
 ```
 
 ### 2. Install Kohya ss-scripts
 
-Follow the [Kohya setup guide](https://github.com/kohya-ss/sd-scripts) to install Kohya in the expected location.
+Follow the [Kohya setup guide](https://github.com/kohya-ss/sd-scripts) to install Kohya ss-scripts.
+
+See [SETUP.md](SETUP.md) for detailed installation instructions.
 
 ### 3. Download SDXL base model
 
-Download `sd_xl_base_1.0.safetensors` from [Stability AI](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) and place it in:
-```
-/Users/jamescallahan/Projects/stable-diffusion/models/sd_xl_base_1.0.safetensors
-```
+Download `sd_xl_base_1.0.safetensors` (6.94 GB) from [Stability AI](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) and place it in your models directory.
+
+### 4. Configure Paths
+
+Update the absolute paths in these files to match your local setup:
+- `train_single_test.sh`
+- `test_eclass.toml`
+- `generate_qwen_captions_eclass.py`
+
+See the [Configuration](#configuration) section below for details.
 
 ## Usage
 
@@ -267,14 +286,29 @@ Sample images are generated every 5 epochs using the sample prompt defined in th
 - Increase `network_dim` to 64 or 128
 - Add more diverse training images
 
-## File Paths
+## Configuration
 
-Update these paths in the scripts if your setup differs:
+### File Paths
 
-- **Kohya directory:** `/Users/jamescallahan/Projects/stable-diffusion/kohya`
-- **SDXL model:** `/Users/jamescallahan/Projects/stable-diffusion/models/sd_xl_base_1.0.safetensors`
-- **Training data:** `./lora_training_kohya/`
-- **Output directory:** `./lora_outputs/`
+You'll need to update absolute paths in these files to match your setup:
+
+**Files to update:**
+- `train_single_test.sh` - Set `KOHYA_DIR` and `CONFIG_FILE` paths
+- `test_eclass.toml` - Set model and data directory paths
+- `generate_qwen_captions_eclass.py` - Set `DATASET_DIR` path
+
+**Example structure:**
+```
+~/your-project-dir/
+├── kohya/                    # Kohya ss-scripts
+├── models/                   # SDXL base model
+│   └── sd_xl_base_1.0.safetensors
+└── this-repo/                # This repository
+    ├── lora_training_kohya/  # Training data (relative paths work)
+    └── lora_outputs/         # Outputs (relative paths work)
+```
+
+See [SETUP.md](SETUP.md) for detailed path configuration instructions.
 
 ## License
 

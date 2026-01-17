@@ -1,7 +1,19 @@
-# Simple test config for Mercedes E-Class LoRA
-pretrained_model_name_or_path = "/Users/jamescallahan/Projects/stable-diffusion/models/sd_xl_base_1.0.safetensors"
-train_data_dir = "/Users/jamescallahan/Projects/stable-diffusion/stanford dataset/lora_training_kohya/mercedesbenz_eclass"
-output_dir = "/Users/jamescallahan/Projects/stable-diffusion/stanford dataset/lora_outputs/test_eclass"
+# Training config for Mercedes E-Class LoRA
+#
+# ⚠️  IMPORTANT: Update these paths to match your local setup before training! ⚠️
+# Replace the example paths below with your actual directory structure.
+#
+# Optimized for Apple Silicon (M4 Max, 36GB+ RAM)
+# For less RAM: reduce train_batch_size to 1 and max_bucket_reso to 768
+
+# UPDATE THIS PATH: Location of your SDXL base model
+pretrained_model_name_or_path = "/Users/YOUR_USERNAME/path/to/sd_xl_base_1.0.safetensors"
+
+# UPDATE THIS PATH: Location of your E-Class training images + captions
+train_data_dir = "/Users/YOUR_USERNAME/path/to/lora_training_kohya/mercedesbenz_eclass"
+
+# UPDATE THIS PATH: Where to save trained LoRA outputs
+output_dir = "/Users/YOUR_USERNAME/path/to/lora_outputs/test_eclass"
 output_name = "mercedesbenz_eclass"
 resolution = "1024,1024"
 train_batch_size = 2
@@ -26,7 +38,8 @@ min_bucket_reso = 512
 max_bucket_reso = 1024
 caption_extension = ".txt"
 save_model_as = "safetensors"
-logging_dir = "/Users/jamescallahan/Projects/stable-diffusion/stanford dataset/lora_outputs/test_eclass/logs"
+# UPDATE THIS PATH: Where to save training logs
+logging_dir = "/Users/YOUR_USERNAME/path/to/lora_outputs/test_eclass/logs"
 log_with = "tensorboard"
 sample_every_n_epochs = 5
 sample_sampler = "euler_a"

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-Enhanced caption generator using LLaVA via Ollama for Mercedes E-Class dataset.
+Enhanced caption generator using Qwen2-VL via Ollama for Mercedes E-Class dataset.
 Generates detailed, accurate captions for LoRA training with correct colors and positioning.
+
+⚠️  IMPORTANT: Update DATASET_DIR below to match your local setup!
 """
 
 import os
@@ -11,8 +13,9 @@ import base64
 from pathlib import Path
 import time
 
-# Configuration
-DATASET_DIR = "/Users/jamescallahan/Projects/stable-diffusion/stanford dataset/lora_training_kohya/mercedesbenz_eclass/10_mercedesbenzeclasssedan2012"
+# ⚠️  UPDATE THIS PATH: Location of your E-Class training images
+# Example: "/Users/YOUR_USERNAME/path/to/lora_training_kohya/mercedesbenz_eclass/10_mercedesbenzeclasssedan2012"
+DATASET_DIR = "/path/to/lora_training_kohya/mercedesbenz_eclass/10_mercedesbenzeclasssedan2012"
 TRIGGER_WORD = "mercedesbenzeclasssedan2012"
 
 # Qwen2-VL model via Ollama (stronger vision understanding than LLaVA)
